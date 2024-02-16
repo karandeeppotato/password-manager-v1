@@ -7,14 +7,14 @@ rset = `<tr>
 </tr>`;
 
 //delete button functionality
-const deletePassword = (username) => {
+const deletePassword = (indexNo) => {
   let data = localStorage.getItem("passwords");
   let arr = JSON.parse(data);
   let arrUpdated = arr.filter((e) => {
-    return e.username != username;
+    return e.indexNo != indexNo;
   });
   localStorage.setItem("passwords", JSON.stringify(arrUpdated));
-  alert(`${username}'s password deleted`);
+  alert(`Password deleted`);
   showData();
 };
 
@@ -51,7 +51,7 @@ const showData = () => {
       const element = arr[index];
 
       str += `<tr>
-  <th scope="row">${index + 1}</th>
+  <th scope="row">${element.indexNo}</th>
   <td>${element.website}</td>
   <td>${
     element.username
@@ -65,7 +65,7 @@ const showData = () => {
       }')"/></td>
   <td><div id="${element.username}" style="cursor: pointer;">
   <img src="./svgs/delete.svg" style="cursor:pointer" onclick="deletePassword('${
-    element.username
+    element.indexNo
   }')"/>
 </div></td>
 </tr>`;
@@ -97,11 +97,10 @@ $(document).ready(function () {
   $("#submitButton").click(function (event) {
     event.preventDefault();
     let passwords = localStorage.getItem("passwords");
-    console.log(passwords);
-    console.log(InputWebsite.value);
     if (passwords == null) {
       let json = [];
       json.push({
+        indexNo: 1,
         website: InputWebsite.value,
         username: InputEmail.value,
         password: InputPassword.value,
@@ -111,6 +110,7 @@ $(document).ready(function () {
     } else {
       let json = JSON.parse(localStorage.getItem("passwords"));
       json.push({
+        indexNo: json.length + 1,
         website: InputWebsite.value,
         username: InputEmail.value,
         password: InputPassword.value,
