@@ -14,7 +14,7 @@ const deletePassword = (indexNo) => {
     return e.indexNo != indexNo;
   });
   localStorage.setItem("passwords", JSON.stringify(arrUpdated));
-  alert(`Password deleted`);
+  showToast('Deleted Successfully', 'Success');
   showData();
 };
 
@@ -29,10 +29,10 @@ const maskPass = (pass) => {
 const copyText = (txt) => {
   navigator.clipboard.writeText(txt).then(
     () => {
-      alert("Text Copied");
+      showToast('Copied to Clipboard', 'Success');
     },
     () => {
-      alert("Copying Failed");
+      showToast('Copy Error!', 'danger');
     }
   );
 };
@@ -105,7 +105,7 @@ $(document).ready(function () {
         username: InputEmail.value,
         password: InputPassword.value,
       });
-      alert("Password Saved");
+      showToast('Password Saved', 'Success');
       localStorage.setItem("passwords", JSON.stringify(json));
     } else {
       let json = JSON.parse(localStorage.getItem("passwords"));
@@ -115,12 +115,35 @@ $(document).ready(function () {
         username: InputEmail.value,
         password: InputPassword.value,
       });
-      alert("Password Saved");
+      showToast('Password Saved', 'Success');
       localStorage.setItem("passwords", JSON.stringify(json));
     }
     showData();
   });
 });
+
+//toasts
+const showToast = (message, type) => {
+  const toastContainer = $('#toast-container');
+  
+  //toasts shouldn't stack up
+  $('.toast').remove();
+
+  // Create new toast
+  const toast = `
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" data-delay="3000">
+      <div class="toast-header">
+        <strong class="mr-auto">${type}</strong>
+      </div>
+      <div class="toast-body">${message}</div>
+    </div>
+  `;
+  toastContainer.append(toast);
+
+  // Show the toast
+  $('.toast').toast('show');
+};
+
 
 //Animations
 $("#navbar").fadeOut(0).fadeIn(700);
