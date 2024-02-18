@@ -14,7 +14,7 @@ const deletePassword = (indexNo) => {
     return e.indexNo != indexNo;
   });
   localStorage.setItem("passwords", JSON.stringify(arrUpdated));
-  showToast('Deleted Successfully', 'Success');
+  showToast("Deleted Successfully", "Success");
   showData();
 };
 
@@ -29,10 +29,10 @@ const maskPass = (pass) => {
 const copyText = (txt) => {
   navigator.clipboard.writeText(txt).then(
     () => {
-      showToast('Copied to Clipboard', 'Success');
+      showToast("Copied to Clipboard", "Success");
     },
     () => {
-      showToast('Copy Error!', 'danger');
+      showToast("Copy Error!", "danger");
     }
   );
 };
@@ -96,27 +96,36 @@ showData();
 $(document).ready(function () {
   $("#submitButton").click(function (event) {
     event.preventDefault();
-    let passwords = localStorage.getItem("passwords");
-    if (passwords == null) {
-      let json = [];
-      json.push({
-        indexNo: 1,
-        website: InputWebsite.value,
-        username: InputEmail.value,
-        password: InputPassword.value,
-      });
-      showToast('Password Saved', 'Success');
-      localStorage.setItem("passwords", JSON.stringify(json));
+
+    if (
+      InputWebsite.value == "" ||
+      InputEmail.value == "" ||
+      InputPassword.value == ""
+    ) {
+      showToast("One or more fields are empty", "Error");
     } else {
-      let json = JSON.parse(localStorage.getItem("passwords"));
-      json.push({
-        indexNo: json.length + 1,
-        website: InputWebsite.value,
-        username: InputEmail.value,
-        password: InputPassword.value,
-      });
-      showToast('Password Saved', 'Success');
-      localStorage.setItem("passwords", JSON.stringify(json));
+      let passwords = localStorage.getItem("passwords");
+      if (passwords == null) {
+        let json = [];
+        json.push({
+          indexNo: 1,
+          website: InputWebsite.value,
+          username: InputEmail.value,
+          password: InputPassword.value,
+        });
+        showToast("Password Saved", "Success");
+        localStorage.setItem("passwords", JSON.stringify(json));
+      } else {
+        let json = JSON.parse(localStorage.getItem("passwords"));
+        json.push({
+          indexNo: json.length + 1,
+          website: InputWebsite.value,
+          username: InputEmail.value,
+          password: InputPassword.value,
+        });
+        showToast("Password Saved", "Success");
+        localStorage.setItem("passwords", JSON.stringify(json));
+      }
     }
     showData();
   });
@@ -124,10 +133,10 @@ $(document).ready(function () {
 
 //toasts
 const showToast = (message, type) => {
-  const toastContainer = $('#toast-container');
-  
+  const toastContainer = $("#toast-container");
+
   //toasts shouldn't stack up
-  $('.toast').remove();
+  $(".toast").remove();
 
   // Create new toast
   const toast = `
@@ -141,12 +150,10 @@ const showToast = (message, type) => {
   toastContainer.append(toast);
 
   // Show the toast
-  $('.toast').toast('show');
+  $(".toast").toast("show");
 };
-
 
 //Animations
 $("#navbar").fadeOut(0).fadeIn(700);
 $("#saved-credentials").fadeOut(0).fadeIn(700);
 $("#add-credentials").fadeOut(0).fadeIn(700);
-
